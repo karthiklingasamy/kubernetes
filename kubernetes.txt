@@ -1,0 +1,86 @@
+Kubernetes Architecture
+--------------------------
+1. Nodes - Node is a machine which is physical or virtual on which kubernetes is installed. Nodes is a worker machine 
+that is where containes will be launched by kubernetes
+
+2. Cluster - A cluster is a set of nodes grouped together. This way even if one node fails you have your application
+still accessible from other nodes. Moreover having multiple nodes helps in sharing load as well
+
+3. Master - Who is responsoble for managing the cluster?
+          - where is the information about members of the cluster stored?
+          - How are the nodes monitored?
+          - when the node fails how do you move the workload of the failed node to another worker node?
+
+Thats where the master comes in. The master is another node with kubernetes installed in it and is configured as a Master
+The master watches over the nodes in the cluster and is responsible for the actual orchestration of containers on the worker
+nodes.
+
+Kubernetes Components
+---------------------
+1. API Server
+2. etcd key store servises
+3. kubelet services
+4. Container Runtime
+5. Controller
+6. Scheduler
+
+API Server
+----------
+The API server act as a frontend of kubernetes. The users,managements devices,commandline interface all talk to the 
+API server to interact with kunernetes cluster
+
+etcd key store 
+--------------
+etcd is a distributed reliable key value store used by kubernetes to store all data used to manage the cluser.
+Think of it this way when you have multiple nodes and masters in your cluster etcd stores all the information
+on all the nodes in the cluster in a distributed manner. etcd is responsible for implementing locks within 
+the cluster to ensure that there are no conflicts between the masters. 
+
+Schedulers
+----------
+The schedulers is responsible for distributing work or containers across multiple nodes. It looks for newly
+created containers and assigns them to nodes
+
+Controllers
+------------
+The controllers are the brain behind the orchestration. They are responsible for noticing and responding when nodes,
+containers or end points goes down. The controllers make decisions to bring up new containers in such cases.
+
+Container Runtime
+------------------
+The container runtime is the underlying software that is used to run containers. In our case it happens to be docker
+But there are other options as well. 
+
+Kublet
+-------
+Kublet is the agent that runs on each node in the cluster. Tha agent is responsible for making sure the conatiners
+are running on the node as expected
+
+So for we saw two type of servers. Master and Worker and set of components that make up Kubernetes
+
+Master & Worker Nodes
+-----------------------
+How does one server become a master and another server become a slave/worker?
+
+The worker node is where the containers is hosted. For example, Docker containers. And to run docker container
+runtime installed and that's where the container runtime falls. In this case it happens to be docker.
+This doesn't to be docker there are other container runtime alternatives such as Rocket or Cryo.
+But throughout this course we use docker container runtime engine.
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
