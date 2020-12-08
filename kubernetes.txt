@@ -67,20 +67,29 @@ runtime installed and that's where the container runtime falls. In this case it 
 This doesn't to be docker there are other container runtime alternatives such as Rocket or Cryo.
 But throughout this course we use docker container runtime engine.
 
+PODS
+-----
+YAML in kubernetes
+4 Tob level Properties
 
+1. apiversion
+2. kind
+3. metadata
+4. spec
 
+To create a pod
+------------------
+> kubectl create -f pod-definition.yml
+> kubectl apply  -f pod-definition.yml
 
+To see list of pods
+----------------------
+>kubectl get pods
 
+To see detail info about the pod
+----------------------------------
+> kubectl describe pod myapp-pod
 
-
-
- 
-
-
-
-
-
-
-
-
-
+To create pod using run command
+--------------------------------------------
+> kubectl run nginix --image=nginx
