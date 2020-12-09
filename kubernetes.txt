@@ -140,3 +140,61 @@ Replication Controller Vs Replication set
 -----------------------------------------------------
 Both have the same purpose but they are not same. Replication controller is a older technologi is replaced by replica set.  So the replica set is 
 the new recomented way to set our replication. However whatever we discussed in our previous slides is applicable to both the technologied
+
+Replicaset: (Three major section template-->replica---->selector)
+---------------
+apiVersion: apps/v1
+kind: Replicaset
+metadata:
+  name: myapp-Replicaset
+  labels:
+    app: myapp
+    type:  front-end
+spec:
+  template: ----------------------------------------------------------------------------------section 1
+    metadata:
+    name: myapp-pod
+    labels:
+      app: myapp 
+      type: front-end
+    spec:
+      containers:
+      - name: nginx-container
+        image: nginx
+  replicas: 3 ----------------------------------------------------------------------------------section 2
+  selector:    -----------------------------------------------------------------------------------section 3
+    matchLabels: 
+      type: front-end
+
+  Note: The replica set can also manage pods that were not created as part of replicaset creation. So the selector is the one of the major difference 
+            between the Replica Set Vs Replica Controller
+
+> kubectl create -f replicaset-definition.yml
+> kubectl get replicaset
+> kubectl get pods
+
+Labels & Selectors
+--------------------------
+why do we label pods and object in kubernetes?
+If you label the pod this way then the replica set know to monitore
+
+Scale
+------
+How we scale the Replica Set ?
+Let assume we started with 3 replicas and future we decide to scale 6. How do we update our replica set sacle to 6 replicas?
+
+option 1: update the replica set definition file
+> kubectl replace -f replicaset-definition.yml
+option 2: run kubectrl scale command use the replicas parameter to provide new number of replica and specify the same file as input
+> kubectl scale --replicas=6 -f replicaset-definition.yml
+> kubectl scale --replicas=6 replicaset myapp-replicaset
+
+Note: There is aslo options available automatically increase the replaset based on load that is advace topic
+
+commands
+---------------
+> kubectrl create -f replicaset-definition.yml
+> kubectl get replicaset
+> kubectl delete replicaset myapp-replicaset (Also deletes all underlying PODs)
+> kubectl replace -f  replicaset-definition.yml
+> kubectl sacle -replicaset=6 -f replicaset-definition.yml
