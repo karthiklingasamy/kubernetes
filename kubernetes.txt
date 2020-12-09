@@ -77,8 +77,12 @@ YAML in kubernetes
 3. metadata
 4. spec
 
-To create a pod
-------------------
+To create pod using run command
+--------------------------------------------
+> kubectl run nginix --image=nginx
+
+To create a pod using yaml
+----------------------------------
 > kubectl create -f pod-definition.yml
 > kubectl apply  -f pod-definition.yml
 
@@ -88,8 +92,28 @@ To see list of pods
 
 To see detail info about the pod
 ----------------------------------
-> kubectl describe pod myapp-pod
+> kubectl describe pod myapp-pod (You can comapre the result with kubernetes GUI)
+> kubectl describe pod newpods-bcvm4 | grep -i images
 
-To create pod using run command
---------------------------------------------
-> kubectl run nginix --image=nginx
+To see which node are these pods place on
+--------------------------------------------------------
+> kubectl get pods -o wide
+
+To edit the pod
+--------------------
+> kubectl edit pod redis
+> update the pod-definition file and use kubectl apply
+
+
+Note : The below cmd i get from  Excersis video
+
+This command is used to do smoke test. It will not creat pods but create the yaml file
+> kubectl run redis --image=redis123 --dry-run=client -o yaml >pod.yaml
+
+Change the image name from redis123 to redis and run the below cmd
+
+> kubectl apply -f pod.yaml
+
+To delete the pod
+-------------------------
+> kubectl delete pod webapp

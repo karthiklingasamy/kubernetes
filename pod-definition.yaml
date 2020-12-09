@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-2
+  label:
+spec:
+  containers:
+    - name: redis123
+      image: redis123
