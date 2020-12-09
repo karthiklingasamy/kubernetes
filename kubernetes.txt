@@ -117,3 +117,26 @@ Change the image name from redis123 to redis and run the below cmd
 To delete the pod
 -------------------------
 > kubectl delete pod webapp
+
+kubernetes controllers
+--------------------------------
+Controllers are the brain behind kubernetes. They are the processes monitor the kuberneted objects and respons accordingly. 
+1. Replication Controller
+
+   What is replica and why do we need replication controller?
+   The replication controller help us to run multiple instance of the single pod in the kubernetes cluster this providing high availability
+
+   Does that mean you can't use replication controller if you plan to use single  pod ?
+   No. Even if you have a single pod the replication controller can help by automatically bring up new pod when the existing one fails
+   Thus the replication controllers ensures the specified number of pods are running all the time even it 1 or 100
+
+   Load Balancing & Scaling ?
+    Another reasion we need replication controller to create multiple pods and sharing the load across them. 
+    The replication controller span across multiple nodes in the cluster and it helps us balance the load across multiple pods on different nodes
+    as well as scale our application when the demand increases
+
+
+Replication Controller Vs Replication set
+-----------------------------------------------------
+Both have the same purpose but they are not same. Replication controller is a older technologi is replaced by replica set.  So the replica set is 
+the new recomented way to set our replication. However whatever we discussed in our previous slides is applicable to both the technologied
