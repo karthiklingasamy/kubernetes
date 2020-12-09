@@ -67,7 +67,7 @@ runtime installed and that's where the container runtime falls. In this case it 
 This doesn't to be docker there are other container runtime alternatives such as Rocket or Cryo.
 But throughout this course we use docker container runtime engine.
 
-PODS
+PODS (2 Type of pods 1. Stanalone pods or replicaset pods)
 -----
 YAML in kubernetes
 4 Tob level Properties
@@ -141,6 +141,9 @@ Replication Controller Vs Replication set
 Both have the same purpose but they are not same. Replication controller is a older technologi is replaced by replica set.  So the replica set is 
 the new recomented way to set our replication. However whatever we discussed in our previous slides is applicable to both the technologied
 
+Replica set are ensure always the required number of pods are running. If one pod is deleted it create new pod automatically the defined 
+number of pods are always on the cluster
+
 Replicaset: (Three major section template-->replica---->selector)
 ---------------
 apiVersion: apps/v1
@@ -195,6 +198,32 @@ commands
 ---------------
 > kubectrl create -f replicaset-definition.yml
 > kubectl get replicaset
+> kubctl get pods
 > kubectl delete replicaset myapp-replicaset (Also deletes all underlying PODs)
 > kubectl replace -f  replicaset-definition.yml
 > kubectl sacle -replicaset=6 -f replicaset-definition.yml
+> kubectl describe replicaset myapp-replicaset
+
+what if more number of pods than the required?
+Lets create more pods outside of replicaset using pod command with the label that the replicset selector users
+Now look the status of the new pod is terminated. This is bcz the replica set terminating the new pod we just
+created. Replica Set not allowing to create more pods with the same label than the number of replica specified
+on the replicaset
+
+How to update the replicaset?
+what if we want to increase the replica to 4 instead of 3. We are trying to scale up our application. 
+option 1
+---------
+> kubectl edit replicaset myapp-replicaset
+
+when we run the above command it opens the runnung configuration of the replica set. This is not the 
+actutal file we created. This is the temporary file kubernetes created in memory. It allow us to edit
+the configureation object. Thats why you see additional details other than the one we provided.
+Changes made to the files are directly applied on the running configuration of the cluster as soon as the 
+file is saved
+
+option 2
+---------
+> kubectl scale replicaset myap-replicaset --replicas=2
+
+Now see the replica set is scaling down to 2 replica by terminating the two of the pods
