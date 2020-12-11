@@ -203,6 +203,7 @@ commands
 > kubectl replace -f  replicaset-definition.yml
 > kubectl sacle -replicaset=6 -f replicaset-definition.yml
 > kubectl describe replicaset myapp-replicaset
+> kubectl explain replicaset|grep VERSION
 
 what if more number of pods than the required?
 Lets create more pods outside of replicaset using pod command with the label that the replicset selector users
@@ -224,6 +225,88 @@ file is saved
 
 option 2
 ---------
-> kubectl scale replicaset myap-replicaset --replicas=2
+> kubectl scale replicaset  --replicas=2 myap-replicaset
 
 Now see the replica set is scaling down to 2 replica by terminating the two of the pods
+
+
+kubernetes deployment
+-----------------------------
+
+deployment definition file is similar to the replicaset definition file. Except the kind which is going to be deployment
+> kubectl create -f deployment-definition.yml
+
+> kubectl get deployments
+
+> kubectl get replicaset
+
+> kubectl get pods
+
+> kubectl describe deployment myapp-deployment 
+
+To see all in one go (deployment, replicaset and pods)
+> kubectl get all
+
+Rollout and Versioning
+-------------------------------
+When you first create a deployment it triggers a rollout. A new rollout creats new deployment revision (call it revision 1).
+In the feature when  the application is upgraded meaning when the container version is updated to a new one a new rollout is triggered and new deployment revision is created (call it revision 2) .
+This helps us keep track of the changes made to our deployment and enable us to rollback to  previous version of deployment if necessary. 
+
+Rollout command
+-----------------------
+You can see the status of the rollout by running the below command
+> kubectl rollout status deployment/myapp-deployment
+
+To see the revisions and history of rollout  run the below command
+
+>kubectl rollout history deployment/myapp-deployment
+Deployment Strategy
+---------------------------
+There are 2 ways of deployment Strategy
+
+Option 1 (Recreate Strategy):
+            For example say 5 replica of your web application instance deployed. one way to upgrade this to a new version is to destroy all of this and to create newer version of the application instances.
+            This will down the system for a period of time untill the new instance  up and run. So there is no high availability. However this is not the default behevaiour of the kubeneties deployment
+
+Option 2 (Rolling Update is the default deployment strategy)
+            We do not destroy our applicatin instance all at once. Take down older version and bring upo new version one by one. This way the application never goes down and upgrade seamless
+
+Note: If you do not specify the deployment strategy and it will assuming it to be rolling update. 
+
+> kubectl get replicasets
+
+
+Kubectl apply
+-----------------
+How exactly do you update your deployment?
+when we say update it could be different things such us 
+  1. updating your application version
+  2. updating the version of docker containers used
+  3. updating the labels
+  4. updating the number of replica etcd
+
+since we already have the deployment definition file it is easy for us to modify the file. Once we make the necessary changes. we run the below command
+> kubectl apply -f  deployment-definition.yml
+
+a new rollout is triggered and new revision of the deployment is created. But there is another way to create deployment you could use the below sommand
+
+> kubectl set image deployment/myapp-deployment nginx=nginx:1.9.1
+
+Note: when you run the above command remember the deployment definition config file have different configuration. so you must be carefull 
+
+
+> kubectl get replicasets
+
+Rollback 
+------------
+> kubectl rollout undo deployment/myapp-deployment
+Summarize commands
+--------------------------
+create   >  kubectl create -f deployment-definition.yml
+get       >  kubectl get deployments
+update >  kubectl apply -f deployment-definition.yml
+           >   kubectl set image deployment/myapp-deployment nginx=nginx:1.9.1
+status  >   kubectl rollout status deployment/myapp-deployment
+           >    kubectl rollout history deployment/myapp-deployment
+rollback > kubectl rollout undo deployment/myapp-deployment
